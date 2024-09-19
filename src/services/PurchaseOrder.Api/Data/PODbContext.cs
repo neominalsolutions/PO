@@ -1,17 +1,19 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using PurchaseOrder.Api.Domain.Aggregates.POAggregate;
 using PurchaseOrder.Api.Domain.Aggregates.PRAggregate;
 using PurchaseOrder.Api.Shared;
 
 namespace PurchaseOrder.Api.Data
 {
-  public class PODbContext:DbContext
+  public class PODbContext : DbContext
   {
     // EF Core ile birlikte Aggregate Root nenslerinin DbSetlerini yazıyoruz. Alt Entitylerde Migrationda oluşuyor.
     public DbSet<PurchaseRequest> PoRequests { get; set; }
+    public DbSet<PurchaseOrder.Api.Domain.Aggregates.POAggregate.PurchaseOrder> PoOrders { get; set; }
     private IMediator mediator;
 
-    public PODbContext(DbContextOptions<PODbContext> opt, IMediator mediator) :base(opt)
+    public PODbContext(DbContextOptions<PODbContext> opt, IMediator mediator) : base(opt)
     {
       this.mediator = mediator;
     }
@@ -26,8 +28,8 @@ namespace PurchaseOrder.Api.Data
       modelBuilder.Entity<PurchaseRequest>().OwnsOne(x => x.Status).Property(x => x.Name).HasColumnName("RequestStatus_Name");
 
 
-   
-      
+
+
 
 
       modelBuilder.Entity<PurchaseRequest>().OwnsOne(x => x.Budget).Property(x => x.currency).HasColumnName("Budget_Currency");
@@ -42,6 +44,16 @@ namespace PurchaseOrder.Api.Data
 
       modelBuilder.Entity<PurchaseRequestItem>().OwnsOne(x => x.ListPrice).Property(x => x.currency).HasColumnName("ListPrice_Currency");
       modelBuilder.Entity<PurchaseRequestItem>().OwnsOne(x => x.ListPrice).Property(x => x.amount).HasColumnName("ListPrice_Amount");
+
+
+      modelBuilder.Entity<PurchaseOrder.Api.Domain.Aggregates.POAggregate.PurchaseOrder>().OwnsOne(x => x.Status).Property(x => x.Id).HasColumnName("OrderStatus_Code");
+      modelBuilder.Entity<PurchaseOrder.Api.Domain.Aggregates.POAggregate.PurchaseOrder>().OwnsOne(x => x.Status).Property(x => x.Name).HasColumnName("OrderStatus_Name");
+
+
+      modelBuilder.Entity<PurchaseOrder.Api.Domain.Aggregates.POAggregate.PurchaseOrderItem>().OwnsOne(x => x.ListPrice).Property(x => x.currency).HasColumnName("ListPrice_Currency");
+      modelBuilder.Entity<PurchaseOrder.Api.Domain.Aggregates.POAggregate.PurchaseOrderItem>().OwnsOne(x => x.ListPrice).Property(x => x.amount).HasColumnName("ListPrice_Amount");
+
+      modelBuilder.Entity<PurchaseOrder.Api.Domain.Aggregates.POAggregate.PurchaseOrder>().HasMany(x => x.Items);
 
       base.OnModelCreating(modelBuilder);
     }

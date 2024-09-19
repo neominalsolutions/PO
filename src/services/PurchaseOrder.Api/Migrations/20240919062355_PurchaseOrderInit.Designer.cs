@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PurchaseOrder.Api.Data;
 
@@ -11,9 +12,10 @@ using PurchaseOrder.Api.Data;
 namespace PurchaseOrder.Api.Migrations
 {
     [DbContext(typeof(PODbContext))]
-    partial class PODbContextModelSnapshot : ModelSnapshot
+    [Migration("20240919062355_PurchaseOrderInit")]
+    partial class PurchaseOrderInit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

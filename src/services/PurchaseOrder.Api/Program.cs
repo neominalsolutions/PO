@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PurchaseOrder.Api.Data;
 using PurchaseOrder.Api.Data.Repositories;
+using PurchaseOrder.Api.Domain.Aggregates.POAggregate;
 using PurchaseOrder.Api.Domain.Aggregates.PRAggregate;
 using PurchaseOrder.Api.SeedWork;
 using System.Reflection;
@@ -20,8 +21,17 @@ builder.Services.AddDbContext<PODbContext>(opt =>
 
 });
 
+builder.Services.AddCap(x =>
+{
+  x.UseEntityFramework<PODbContext>();
+  x.UseSqlServer(builder.Configuration.GetConnectionString("DbConn"));
+  x.UseRabbitMQ("localhost");
+  x.UseDashboard(opt => { opt.PathMatch = "/CapDashboard"; });
+});
+
 builder.Services.AddScoped<IUnitOfWork, POUnitOfWork>();
 builder.Services.AddScoped<IPurchaseRequestRepository, PurchaseRequestRepo>();
+builder.Services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepo>();
 
 
 
