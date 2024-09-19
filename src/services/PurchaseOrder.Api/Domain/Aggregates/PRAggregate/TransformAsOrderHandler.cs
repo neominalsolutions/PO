@@ -35,7 +35,7 @@ namespace PurchaseOrder.Api.Domain.Aggregates.PRAggregate
       this.purchaseOrderRepository.Create(purchaseOrder); // Added State
 
 
-      if (purchaseRequest.Status != PurchaseRequestStatus.Pending)
+      if (purchaseRequest.Status.Id != PurchaseRequestStatus.Pending.Id)
       {
         throw new Exception("Purchase Request Status Pending Durumda Değil");
       }

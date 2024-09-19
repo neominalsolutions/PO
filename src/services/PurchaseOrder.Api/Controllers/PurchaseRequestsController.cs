@@ -73,7 +73,7 @@ namespace PurchaseOrder.Api.Controllers
           // veri tabanına düzgün kaydedebilirse aynı zamanda published tablosunada kayıt atabilecek.
           unitOfWork.SaveChanges();
 
-          await this.capPublisher.PublishAsync("OrderCompleted3", @event);
+          await this.capPublisher.PublishAsync(QueueTypes.OrderCompleted, @event);
 
           return Ok();
         }

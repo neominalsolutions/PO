@@ -25,7 +25,7 @@ builder.Services.AddCap(x =>
 {
   x.UseEntityFramework<PODbContext>();
   x.UseSqlServer(builder.Configuration.GetConnectionString("DbConn"));
-  x.UseRabbitMQ("localhost");
+  x.UseRabbitMQ(builder.Configuration.GetConnectionString("RabbitMqConn"));
   x.UseDashboard(opt => { opt.PathMatch = "/CapDashboard"; });
 });
 
